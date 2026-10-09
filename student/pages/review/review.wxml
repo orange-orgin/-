@@ -1,0 +1,84 @@
+<!-- pages/review/review.wxml -->
+<view class="container" wx:if="{{order}}">
+  <!-- 顶部导航 -->
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="onBack">←</view>
+    <text class="nav-title">评价</text>
+  </view>
+  
+  <!-- 商家信息 -->
+  <view class="shop-section">
+    <text class="shop-icon">🏪</text>
+    <text class="shop-name">{{order.shopName}}</text>
+  </view>
+  
+  <!-- 商品信息 -->
+  <view class="goods-section">
+    <view class="goods-item" wx:for="{{order.items}}" wx:key="name">
+      <text class="goods-name">{{item.name}}</text>
+      <text class="goods-num">x{{item.quantity}}</text>
+    </view>
+  </view>
+  
+  <!-- 评分 -->
+  <view class="rating-section">
+    <view class="section-title">商品评分</view>
+    <view class="rating-stars">
+      <view 
+        class="star {{rating >= item ? 'active' : ''}}"
+        wx:for="{{stars}}"
+        wx:key="index"
+        bindtap="onRatingChange"
+        data-rating="{{item}}"
+      >
+        ⭐
+      </view>
+    </view>
+    <view class="rating-text">
+      {{rating === 5 ? '非常满意' : rating === 4 ? '满意' : rating === 3 ? '一般' : rating === 2 ? '不满意' : '非常不满意'}}
+    </view>
+  </view>
+  
+  <!-- 评价标签 -->
+  <view class="tags-section">
+    <view class="section-title">选择标签</view>
+    <view class="tags-list">
+      <view 
+        class="tag-item {{selectedTags.includes(item) ? 'selected' : ''}}"
+        wx:for="{{tags}}"
+        wx:key="index"
+        bindtap="onTagTap"
+        data-tag="{{item}}"
+      >
+        {{item}}
+      </view>
+    </view>
+  </view>
+  
+  <!-- 文字评价 -->
+  <view class="content-section">
+    <view class="section-title">详细评价</view>
+    <textarea 
+      class="content-input"
+      placeholder="分享您的用餐体验吧..."
+      value="{{content}}"
+      bindinput="onContentInput"
+      maxlength="200"
+    />
+    <view class="content-count">{{content.length}}/200</view>
+  </view>
+  
+  <!-- 图片上传（暂不支持） -->
+  <view class="image-section">
+    <view class="section-title">上传图片</view>
+    <view class="add-image" bindtap="onAddImage">
+      <text class="add-icon">+</text>
+      <text class="add-text">添加图片</text>
+    </view>
+  </view>
+  
+  <!-- 提交按钮 -->
+  <view class="submit-bar">
+    <view class="submit-btn" bindtap="onSubmit">提交评价</view>
+  </view>
+</view>

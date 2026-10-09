@@ -1,0 +1,288 @@
+{
+  "shops": [
+    {
+      "id": "shop1",
+      "name": "美味餐厅",
+      "phone": "13800138001",
+      "address": "校园美食街A区101号",
+      "businessHours": "09:00-21:00",
+      "notice": "",
+      "logo": "https://neeko-copilot.bytedance.net/api/text2image?prompt=restaurant%20logo%20food%20delicious%20modern&image_size=square",
+      "status": "open",
+      "deliverFee": 0,
+      "minPrice": 10,
+      "score": 85,
+      "monthlySales": 3,
+      "createdAt": 1778160305767
+    },
+    {
+      "id": "shop2",
+      "name": "麻辣香锅",
+      "phone": "13800138002",
+      "address": "校园美食街B区202号",
+      "businessHours": "10:00-22:00",
+      "notice": "",
+      "logo": "https://neeko-copilot.bytedance.net/api/text2image?prompt=spicy%20food%20logo%20chinese%20style&image_size=square",
+      "status": "open",
+      "deliverFee": 0,
+      "minPrice": 12,
+      "score": 4.6,
+      "monthlySales": 0,
+      "createdAt": 1779456305767
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat1781706053614",
+      "name": "特色菜",
+      "sortOrder": 1
+    },
+    {
+      "id": "cat1781706080449",
+      "name": "套餐",
+      "sortOrder": 2
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish1791465915196_160",
+      "name": "花雕醉鸡",
+      "price": 35,
+      "originalPrice": 50,
+      "image": "https://picsum.photos/seed/%E8%8A%B1%E9%9B%95%E9%86%89%E9%B8%A1/400/400",
+      "stock": 47,
+      "description": "嘉乐疯狂安利！！！",
+      "categoryId": "cat1781706053614",
+      "shopId": "shop1",
+      "status": "active",
+      "sales": 3,
+      "createdAt": 1781706120324
+    },
+    {
+      "id": "dish1791465915196_267",
+      "name": "两荤两素",
+      "price": 12,
+      "originalPrice": 15,
+      "image": "https://picsum.photos/seed/%E4%B8%A4%E8%8D%A4%E4%B8%A4%E7%B4%A0/400/400",
+      "stock": 100,
+      "description": "健康第一",
+      "categoryId": "cat1781706080449",
+      "shopId": "shop1",
+      "status": "active",
+      "sales": 0,
+      "createdAt": 1781706147671
+    }
+  ],
+  "orders": [
+    {
+      "id": "ORD1781706359269397",
+      "orderNo": "ORD1781706359269397",
+      "userId": "student_1781706359250",
+      "userName": "校园用户",
+      "userPhone": "13900000000",
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "status": "completed",
+      "items": [
+        {
+          "dishId": "dish1791465915196_160",
+          "name": "花雕醉鸡",
+          "price": 35,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 35,
+      "actualPrice": 35,
+      "deliverFee": 0,
+      "discountAmount": 0,
+      "remark": "",
+      "pickupCode": "3279",
+      "createTime": 1781706359269,
+      "updateTime": 1781706518036
+    },
+    {
+      "id": "ORD178170634643866",
+      "orderNo": "ORD178170634643866",
+      "userId": "student_1781706346420",
+      "userName": "校园用户",
+      "userPhone": "13900000000",
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "status": "completed",
+      "items": [
+        {
+          "dishId": "dish1791465915196_160",
+          "name": "花雕醉鸡",
+          "price": 35,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 35,
+      "actualPrice": 35,
+      "deliverFee": 0,
+      "discountAmount": 0,
+      "remark": "微微微辣！",
+      "pickupCode": "6643",
+      "createTime": 1781706346438,
+      "updateTime": 1781706519425
+    },
+    {
+      "id": "ORD1781706293414893",
+      "orderNo": "ORD1781706293414893",
+      "userId": "student_1781706293387",
+      "userName": "校园用户",
+      "userPhone": "13900000000",
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "status": "cancelled",
+      "items": [
+        {
+          "dishId": "dish1791465915196_160",
+          "name": "花雕醉鸡",
+          "price": 35,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 35,
+      "actualPrice": 35,
+      "deliverFee": 0,
+      "discountAmount": 0,
+      "remark": "微微微辣",
+      "pickupCode": "7303",
+      "createTime": 1781706293414,
+      "updateTime": 1781706315117,
+      "cancelReason": "1"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "rev1781706593107",
+      "orderId": "ORD1781706359269397",
+      "userId": "student",
+      "userName": "学生",
+      "rating": 5,
+      "content": "好吃！！！！！下次还来",
+      "images": [],
+      "reply": "谢谢",
+      "createTime": 1781706593107,
+      "replyTime": 1781706614947,
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "tags": []
+    }
+  ],
+  "statistics": {
+    "daily": {
+      "dates": [
+        "2026-06-17",
+        "2026-10-08"
+      ],
+      "sales": [
+        70,
+        82
+      ],
+      "orders": [
+        2,
+        1
+      ]
+    },
+    "weekly": {
+      "dates": [],
+      "sales": [],
+      "orders": []
+    },
+    "monthly": {
+      "dates": [],
+      "sales": [],
+      "orders": []
+    }
+  },
+  "categorySales": [
+    {
+      "name": "特色菜",
+      "value": 140
+    },
+    {
+      "name": "套餐",
+      "value": 12
+    }
+  ],
+  "topDishes": [
+    {
+      "name": "????",
+      "sales": 3
+    },
+    {
+      "name": "花雕醉鸡",
+      "sales": 2
+    }
+  ],
+  "studentShops": [
+    {
+      "id": 1,
+      "serverId": "shop1",
+      "name": "美味餐厅",
+      "icon": "🍽️",
+      "rating": 4.8,
+      "sales": 0,
+      "distance": "200m",
+      "time": "15分钟",
+      "deliveryFee": 0,
+      "minAmount": 10,
+      "status": "营业中",
+      "isOpen": true,
+      "notice": "",
+      "banner": "",
+      "description": ""
+    },
+    {
+      "id": 2,
+      "serverId": "shop2",
+      "name": "麻辣香锅",
+      "icon": "🌶️",
+      "rating": 4.6,
+      "sales": 0,
+      "distance": "300m",
+      "time": "20分钟",
+      "deliveryFee": 0,
+      "minAmount": 12,
+      "status": "营业中",
+      "isOpen": true,
+      "notice": "",
+      "banner": "",
+      "description": ""
+    }
+  ],
+  "supervisors": [
+    {
+      "id": "admin",
+      "username": "admin",
+      "password": "admin123",
+      "name": "平台管理员"
+    }
+  ],
+  "evaluations": [
+    {
+      "id": "eval1781773134712",
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "type": "quality",
+      "score": 85,
+      "content": "花雕醉鸡很不错",
+      "createTime": 1781773134712
+    }
+  ],
+  "rewards": [
+    {
+      "id": "rwd1781773201094",
+      "shopId": "shop1",
+      "shopName": "美味餐厅",
+      "title": "月度最受欢迎商家",
+      "content": "返佣",
+      "value": 100,
+      "createTime": 1781773201094
+    }
+  ],
+  "registrations": [],
+  "studentDishes": []
+}

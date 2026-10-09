@@ -1,0 +1,103 @@
+<!-- pages/dish/dish.wxml -->
+<view class="container" wx:if="{{!loading}}">
+  <!-- 顶部返回栏 -->
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="onBack">←</view>
+    <text class="nav-title">菜品详情</text>
+  </view>
+  
+  <!-- 菜品图片 -->
+  <view class="dish-image-wrap">
+    <image class="dish-image" src="{{dish.image}}" mode="aspectFill"/>
+    <view class="stock-tag" wx:if="{{dish.stock < 20 && dish.stock > 0}}">
+      仅剩{{dish.stock}}份
+    </view>
+    <view class="stock-tag out" wx:if="{{dish.stock === 0}}">已售罄</view>
+  </view>
+  
+  <!-- 菜品信息 -->
+  <view class="dish-info-card">
+    <view class="dish-name">{{dish.name}}</view>
+    <view class="dish-meta">
+      <text class="sales">已售{{dish.sales}}</text>
+      <text class="stock">库存{{dish.stock}}</text>
+    </view>
+    <view class="dish-price-wrap">
+      <text class="price">¥{{dish.price}}</text>
+      <text class="original-price" wx:if="{{dish.originalPrice > dish.price}}">
+        ¥{{dish.originalPrice}}
+      </text>
+    </view>
+    <view class="dish-desc">{{dish.desc}}</view>
+  </view>
+  
+  <!-- 商家信息 -->
+  <view class="shop-card" wx:if="{{shop}}">
+    <text class="shop-icon">{{shop.icon}}</text>
+    <view class="shop-info">
+      <text class="shop-name">{{shop.name}}</text>
+      <text class="shop-rating">⭐ {{shop.rating}} · {{shop.time}}</text>
+    </view>
+    <view class="shop-status {{shop.isOpen ? 'open' : 'closed'}}">
+      {{shop.status}}
+    </view>
+  </view>
+  
+  <!-- 用户评价 -->
+  <view class="reviews-section">
+    <view class="section-title">用户评价</view>
+    
+    <view wx:if="{{reviews.length === 0}}" class="empty-reviews">
+      暂无评价
+    </view>
+    
+    <view class="review-item" wx:for="{{reviews}}" wx:key="id">
+      <view class="review-header">
+        <image class="review-avatar" src="{{item.avatar}}" mode="aspectFill"/>
+        <view class="review-user">
+          <text class="nickname">{{item.nickname}}</text>
+          <view class="rating">
+            <text wx:for="{{stars}}" wx:for-item="starIndex" wx:key="*this" class="{{starIndex <= item.rating ? 'active' : ''}}">⭐</text>
+          </view>
+        </view>
+        <text class="review-time">{{item.time}}</text>
+      </view>
+      <view class="review-content">{{item.content}}</view>
+      <view class="review-tags">
+        <text class="tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="index">{{tag}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部购买栏 -->
+  <view class="buy-bar">
+    <view class="quantity-wrap">
+      <text class="quantity-label">数量</text>
+      <view class="quantity-control">
+        <view class="qty-btn" bindtap="onDecrease">−</view>
+        <text class="qty-value">{{quantity}}</text>
+        <view class="qty-btn" bindtap="onIncrease">+</view>
+      </view>
+    </view>
+    
+    <view class="buy-actions">
+      <view 
+        class="add-cart-btn {{dish.stock === 0 ? 'disabled' : ''}}"
+        bindtap="{{dish.stock > 0 ? 'onAddToCart' : ''}}"
+      >
+        加入购物车
+      </view>
+      <view 
+        class="buy-btn {{dish.stock === 0 ? 'disabled' : ''}}"
+        bindtap="{{dish.stock > 0 ? 'onBuyNow' : ''}}"
+      >
+        立即购买
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view class="loading-wrap" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>

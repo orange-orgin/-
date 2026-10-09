@@ -1,0 +1,229 @@
+/* pages/review/review.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding-bottom: 140rpx;
+}
+
+/* 导航栏 */
+.nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 88rpx;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 20rpx;
+  z-index: 100;
+}
+
+.back-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #333;
+}
+
+.nav-title {
+  flex: 1;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-right: 60rpx;
+}
+
+/* 商家信息 */
+.shop-section {
+  margin-top: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30rpx;
+  background-color: #fff;
+}
+
+.shop-icon {
+  font-size: 40rpx;
+  margin-right: 12rpx;
+}
+
+.shop-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 商品信息 */
+.goods-section {
+  background-color: #fff;
+  padding: 20rpx 30rpx;
+  border-top: 1rpx solid #f5f5f5;
+}
+
+.goods-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 0;
+}
+
+.goods-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.goods-num {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 评分 */
+.rating-section {
+  background-color: #fff;
+  margin-top: 20rpx;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16rpx;
+}
+
+.star {
+  font-size: 56rpx;
+  margin: 0 8rpx;
+  opacity: 0.3;
+}
+
+.star.active {
+  opacity: 1;
+}
+
+.rating-text {
+  text-align: center;
+  font-size: 28rpx;
+  color: #FF6347;
+}
+
+/* 标签 */
+.tags-section {
+  background-color: #fff;
+  margin-top: 20rpx;
+  padding: 30rpx;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tag-item {
+  padding: 12rpx 24rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.tag-item.selected {
+  background-color: #FF634720;
+  color: #FF6347;
+}
+
+/* 文字评价 */
+.content-section {
+  background-color: #fff;
+  margin-top: 20rpx;
+  padding: 30rpx;
+  position: relative;
+}
+
+.content-input {
+  width: 100%;
+  height: 200rpx;
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.content-count {
+  position: absolute;
+  right: 50rpx;
+  bottom: 50rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 图片上传 */
+.image-section {
+  background-color: #fff;
+  margin-top: 20rpx;
+  padding: 30rpx;
+}
+
+.add-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200rpx;
+  height: 200rpx;
+  background-color: #f5f5f5;
+  border-radius: 12rpx;
+  border: 2rpx dashed #ddd;
+}
+
+.add-icon {
+  font-size: 48rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.add-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 提交按钮 */
+.submit-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background-color: #fff;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.05);
+  z-index: 100;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 88rpx;
+  background: linear-gradient(135deg, #FF6347 0%, #FF7F50 100%);
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

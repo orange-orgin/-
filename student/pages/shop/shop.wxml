@@ -1,0 +1,162 @@
+<!-- pages/shop/shop.wxml -->
+<view class="container">
+  <!-- 顶部商家信息 -->
+  <view class="shop-header">
+    <view class="shop-bg"></view>
+    <view class="shop-content">
+      <view class="back-btn" bindtap="onBack">←</view>
+      <view class="shop-avatar">{{shop.icon}}</view>
+      <view class="shop-name">{{shop.name}}</view>
+      <view class="shop-rating">
+        <text class="rating-star">⭐ {{shop.rating}}</text>
+        <text class="rating-text">月售{{shop.sales}}</text>
+        <text class="rating-time">{{shop.time}}</text>
+      </view>
+      <view class="shop-notice">{{shop.notice}}</view>
+    </view>
+  </view>
+  
+  <!-- 菜品列表和评价切换 -->
+  <view class="tabs">
+    <view 
+      class="tab {{!showReviews ? 'active' : ''}}" 
+      bindtap="toggleReviews"
+    >
+      菜品
+    </view>
+    <view 
+      class="tab {{showReviews ? 'active' : ''}}" 
+      bindtap="toggleReviews"
+    >
+      评价 ({{reviews.length}})
+    </view>
+  </view>
+  
+  <!-- 菜品列表 -->
+  <view class="dish-section" wx:if="{{!showReviews}}">
+    <view class="section-title">热门菜品</view>
+    
+    <view wx:if="{{loading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+    
+    <view class="dish-list">
+      <view 
+        class="dish-item {{item.stock === 0 ? 'out-stock' : ''}}"
+        wx:for="{{dishes}}"
+        wx:key="id"
+        id="dish-{{item.id}}"
+      >
+        <image class="dish-image" src="{{item.image}}" mode="aspectFill" bindtap="onDishTap" data-id="{{item.id}}"/>
+        <view class="dish-info">
+          <view class="dish-name" bindtap="onDishTap" data-id="{{item.id}}">{{item.name}}</view>
+          <view class="dish-desc">{{item.desc}}</view>
+          <view class="dish-meta">
+            <view class="dish-sales">已售{{item.sales}}</view>
+            <view class="dish-stock" wx:if="{{item.stock < 20 && item.stock > 0}}">仅剩{{item.stock}}份</view>
+          </view>
+          <view class="dish-bottom">
+            <view class="dish-price">
+              <text class="price">¥{{item.price}}</text>
+              <text class="original-price" wx:if="{{item.originalPrice > item.price}}">¥{{item.originalPrice}}</text>
+            </view>
+            
+            <!-- 库存为0 -->
+            <view wx:if="{{item.stock === 0}}" class="stock-out">已售罄</view>
+            
+            <!-- 有库存，显示数量控制 -->
+            <view wx:else class="dish-actions">
+              <view 
+                class="action-btn decrease"
+                bindtap="onDecrease"
+                data-id="{{item.id}}"
+                wx:if="{{item.cartCount > 0}}"
+              >−</view>
+              <text class="dish-count" wx:if="{{item.cartCount > 0}}">
+                {{item.cartCount}}
+              </text>
+              <view 
+                class="action-btn increase"
+                bindtap="onAddToCart"
+                data-id="{{item.id}}"
+              >+</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 评价列表 -->
+  <view class="review-section" wx:if="{{showReviews}}">
+    <view wx:if="{{reviewsLoading}}" class="loading">
+      <text>加载中...</text>
+    </view>
+    
+    <view wx:if="{{!reviewsLoading && reviews.length === 0}}" class="empty-reviews">
+      <text>暂无评价</text>
+    </view>
+    
+    <view class="review-list" wx:if="{{!reviewsLoading && reviews.length > 0}}">
+      <view class="review-item" wx:for="{{reviews}}" wx:key="id">
+        <view class="review-header">
+          <image 
+            class="review-avatar" 
+            src="{{item.avatar || 'https://img.yzcdn.cn/vant/default-avatar.jpg'}}" 
+            mode="aspectFill"
+          />
+          <view class="review-user">
+            <text class="nickname">{{item.nickname}}</text>
+            <view class="rating">
+              <text wx:for="{{[1,2,3,4,5]}}" wx:for-item="starIndex" wx:key="*this" 
+                    class="{{starIndex <= item.rating ? 'active' : ''}}">⭐</text>
+            </view>
+          </view>
+          <text class="review-time">{{item.time}}</text>
+        </view>
+        <view class="review-content">{{item.content}}</view>
+        <view class="review-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+          <text class="tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="index">{{tag}}</text>
+        </view>
+        <view class="review-images" wx:if="{{item.images && item.images.length > 0}}">
+          <image 
+            class="review-image" 
+            wx:for="{{item.images}}" 
+            wx:key="index" 
+            src="{{item}}" 
+            mode="aspectFill"
+          />
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部购物车栏 -->
+  <view class="cart-bar" wx:if="{{cartCount > 0}}">
+    <view class="cart-info" bindtap="onCartTap">
+      <view class="cart-icon-wrap">
+        <text class="cart-icon">🛒</text>
+        <view class="cart-badge">{{cartCount}}</view>
+      </view>
+      <view class="cart-total">
+        <text class="total-price">¥{{cartTotal}}</text>
+        <text class="delivery-tip">另需配送费¥{{shop.deliveryFee}}</text>
+      </view>
+    </view>
+    <view class="checkout-btn" bindtap="onCheckout">去结算</view>
+  </view>
+  
+  <!-- 空购物车提示 -->
+  <view class="cart-bar empty-bar" wx:if="{{cartCount === 0 && !loading}}">
+    <text class="empty-hint">👆 点击上方+号添加菜品到购物车</text>
+  </view>
+  
+  <!-- 抛物线动画元素 -->
+  <view 
+    class="parabola-item"
+    wx:if="{{showParabola}}"
+    style="left: {{parabolaX}}px; top: {{parabolaY}}px;"
+  >
+    <text>🍔</text>
+  </view>
+</view>

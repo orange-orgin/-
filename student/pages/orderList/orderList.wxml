@@ -1,0 +1,75 @@
+<!-- pages/orderList/orderList.wxml -->
+<view class="container">
+  <!-- 状态筛选 -->
+  <view class="status-tabs">
+    <view 
+      class="status-tab {{currentStatus === item.status ? 'active' : ''}}"
+      wx:for="{{statusList}}"
+      wx:key="status"
+      bindtap="onStatusChange"
+      data-status="{{item.status}}"
+    >
+      <text class="tab-text">{{item.name}}</text>
+      <view class="tab-line" wx:if="{{currentStatus === item.status}}"></view>
+    </view>
+  </view>
+  
+  <!-- 加载中 -->
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{!loading && orders.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">{{emptyText}}</text>
+  </view>
+  
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{!loading && orders.length > 0}}">
+    <view 
+      class="order-card"
+      wx:for="{{orders}}"
+      wx:key="orderId"
+      bindtap="onOrderTap"
+      data-id="{{item.orderId}}"
+    >
+      <!-- 商家信息 -->
+      <view class="order-header">
+        <view class="shop-info">
+          <text class="shop-icon">🏪</text>
+          <text class="shop-name">{{item.shopName}}</text>
+        </view>
+        <view class="order-status" style="color: {{item.statusColor}}">
+          {{item.statusText}}
+        </view>
+      </view>
+      
+      <!-- 商品预览 -->
+      <view class="order-goods">
+        <view class="goods-preview">
+          <text class="goods-text">{{item.items.length}}件商品</text>
+          <text class="goods-names">{{item.goodsNamesText}}</text>
+        </view>
+        <view class="order-amount">
+          <text class="amount">¥{{item.totalAmount}}</text>
+        </view>
+      </view>
+      
+      <!-- 取餐码 -->
+      <view class="pickup-info" wx:if="{{item.status < 3}}">
+        <text class="pickup-label">取餐码：</text>
+        <text class="pickup-code">{{item.pickupCode}}</text>
+      </view>
+      
+      <!-- 订单时间和操作 -->
+      <view class="order-footer">
+        <text class="order-time">{{item.createTime}}</text>
+        <view class="order-actions">
+          <text class="review-btn" wx:if="{{item.status === 2 && !item.hasReviewed}}" bindtap="onReviewTap" data-id="{{item.orderId}}">去评价</text>
+          <text class="view-detail" bindtap="onOrderTap" data-id="{{item.orderId}}">查看详情 ›</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

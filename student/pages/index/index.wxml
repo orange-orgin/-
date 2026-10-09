@@ -1,0 +1,137 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <!-- 顶部搜索区域 -->
+  <view class="header">
+    <view class="search-bar">
+      <input 
+        class="search-input" 
+        placeholder="搜索菜品/商家"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearchConfirm"
+      />
+      <view class="search-icon">🔍</view>
+      <view 
+        class="clear-btn" 
+        wx:if="{{searchKeyword}}"
+        bindtap="onClearSearch"
+      >×</view>
+    </view>
+  </view>
+  
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{showSearch}}">
+    <view class="search-title">
+      搜索结果 <text class="count">{{searchResults.length}}</text>
+    </view>
+    <view wx:if="{{searchResults.length === 0}}" class="empty-search">
+      <text>未找到相关菜品</text>
+    </view>
+    <view class="search-list">
+      <view 
+        class="search-item" 
+        wx:for="{{searchResults}}" 
+        wx:key="id"
+        bindtap="onDishTap"
+        data-id="{{item.id}}"
+      >
+        <image class="item-image" src="{{item.image}}" mode="aspectFill"/>
+        <view class="item-info">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-desc">{{item.desc}}</view>
+          <view class="item-bottom">
+            <text class="price">¥{{item.price}}</text>
+            <text class="sales">已售{{item.sales}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 主内容区域 -->
+  <view class="main-content" wx:if="{{!showSearch}}">
+    <!-- 轮播公告 -->
+    <view class="notice-section">
+      <swiper class="notice-swiper" autoplay circular>
+        <swiper-item 
+          wx:for="{{announcements}}" 
+          wx:key="id"
+        >
+          <view class="notice-item">{{item.title}}</view>
+        </swiper-item>
+      </swiper>
+    </view>
+    
+    <!-- 分类导航 -->
+    <scroll-view class="category-nav" scroll-x enable-flex enhanced show-scrollbar="{{false}}">
+      <view 
+        class="category-item {{currentCategoryId === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="onCategoryTap"
+        data-id="{{item.id}}"
+      >
+        <text class="category-icon">{{item.icon}}</text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+    
+    <!-- 商家列表 -->
+    <view class="shop-list">
+      <view class="shop-title">推荐商家</view>
+      
+      <view wx:if="{{loading}}" class="loading">
+        <text>加载中...</text>
+      </view>
+      
+      <view 
+        class="shop-card {{!item.isOpen ? 'closed' : ''}}"
+        wx:for="{{shops}}"
+        wx:key="id"
+        bindtap="onShopTap"
+        data-id="{{item.id}}"
+      >
+        <view class="shop-header">
+          <text class="shop-icon">{{item.icon}}</text>
+          <view class="shop-info">
+            <view class="shop-name">{{item.name}}</view>
+            <view class="shop-meta">
+              <text class="rating">⭐ {{item.rating}}</text>
+              <text class="sales">月售{{item.sales}}</text>
+              <text class="time">{{item.time}}</text>
+            </view>
+          </view>
+          <view class="shop-status {{item.isOpen ? 'open' : 'closed'}}">
+            {{item.status}}
+          </view>
+        </view>
+        
+        <view class="shop-notice" wx:if="{{item.notice}}">
+          <text class="notice-label">公告：</text>
+          <text class="notice-text">{{item.notice}}</text>
+        </view>
+        
+        <view class="shop-footer">
+          <text class="delivery-fee">
+            {{item.deliveryFee === 0 ? '免配送费' : '配送费¥' + item.deliveryFee}}
+          </text>
+          <text class="min-amount">起送¥{{item.minAmount}}</text>
+        </view>
+      </view>
+      
+      <view wx:if="{{!loading && shops.length === 0}}" class="empty">
+        <text class="empty-icon">🏪</text>
+        <text class="empty-text">暂无商家</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 购物车悬浮按钮 -->
+  <view 
+    class="cart-btn {{cartBadge > 0 ? 'has-items' : ''}}"
+    bindtap="onCartTap"
+  >
+    <text class="cart-icon">🛒</text>
+    <view class="cart-badge" wx:if="{{cartBadge > 0}}">{{cartBadge > 99 ? '99+' : cartBadge}}</view>
+  </view>
+</view>

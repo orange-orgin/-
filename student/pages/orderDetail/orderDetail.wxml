@@ -1,0 +1,114 @@
+<!-- pages/orderDetail/orderDetail.wxml -->
+<view class="container" wx:if="{{!loading && order}}">
+  <!-- 顶部导航 -->
+  <view class="nav-bar">
+    <view class="back-btn" bindtap="onBack">←</view>
+    <text class="nav-title">订单详情</text>
+  </view>
+  
+  <!-- 取餐码展示 -->
+  <view class="pickup-section" wx:if="{{order.status < 3}}">
+    <view class="pickup-label">取餐码</view>
+    <view class="pickup-code">{{order.pickupCode}}</view>
+    <view class="pickup-hint">请在取餐口出示此码</view>
+  </view>
+  
+  <!-- 订单状态 -->
+  <view class="status-section">
+    <view class="status-header">
+      <text class="status-icon">
+        {{order.status === 0 ? '⏳' : order.status === 1 ? '🍳' : order.status === 2 ? '✅' : '❌'}}
+      </text>
+      <view class="status-info">
+        <view class="status-text" style="color: {{order.statusColor}}">
+          {{order.statusText}}
+        </view>
+        <view class="status-time" wx:if="{{order.status < 3}}">
+          {{order.status === 0 ? '等待商家接单' : order.status === 1 ? '商家正在制作中' : ''}}
+        </view>
+        <view class="status-time" wx:if="{{order.status === 2}}">
+          感谢您的使用，欢迎下次光临
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 商家信息 -->
+  <view class="shop-section">
+    <view class="shop-header">
+      <text class="shop-icon">🏪</text>
+      <text class="shop-name">{{order.shopName}}</text>
+    </view>
+    <view class="divider"></view>
+    <view class="order-items">
+      <view class="order-item" wx:for="{{order.items}}" wx:key="name">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-num">x{{item.num}}</text>
+        <text class="item-price">¥{{item.price}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 订单信息 -->
+  <view class="info-section">
+    <view class="info-row">
+      <text class="info-label">订单编号</text>
+      <text class="info-value">{{order.orderId}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">下单时间</text>
+      <text class="info-value">{{order.createTime}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">支付方式</text>
+      <text class="info-value">微信支付</text>
+    </view>
+    <view class="info-row" wx:if="{{order.remark}}">
+      <text class="info-label">备注</text>
+      <text class="info-value">{{order.remark}}</text>
+    </view>
+  </view>
+  
+  <!-- 金额信息 -->
+  <view class="amount-section">
+    <view class="amount-row">
+      <text class="amount-label">商品金额</text>
+      <text class="amount-value">¥{{order.goodsAmount}}</text>
+    </view>
+    <view class="amount-row">
+      <text class="amount-label">配送费</text>
+      <text class="amount-value">¥{{order.deliveryFee || 0}}</text>
+    </view>
+    <view class="amount-row" wx:if="{{order.couponDiscount > 0}}">
+      <text class="amount-label">优惠券</text>
+      <text class="amount-value">-¥{{order.couponDiscount}}</text>
+    </view>
+    <view class="amount-row total">
+      <text class="amount-label">实付金额</text>
+      <text class="amount-value">¥{{order.totalAmount}}</text>
+    </view>
+  </view>
+  
+  <!-- 底部操作按钮 -->
+  <view class="action-bar">
+    <!-- 待接单：取消订单 -->
+    <view class="action-btn cancel" wx:if="{{order.status === 0}}" bindtap="onCancelOrder">
+      取消订单
+    </view>
+    
+    <!-- 已完成且未评价：去评价 -->
+    <view class="action-btn review" wx:if="{{order.status === 2 && !order.hasReviewed}}" bindtap="onReview">
+      去评价
+    </view>
+    
+    <!-- 可再来一单 -->
+    <view class="action-btn repeat" wx:if="{{order.status === 2 || order.status === 3}}" bindtap="onRepeatOrder">
+      再来一单
+    </view>
+  </view>
+</view>
+
+<!-- 加载中 -->
+<view class="loading-wrap" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>
