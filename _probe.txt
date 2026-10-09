@@ -1,4 +1,0 @@
-﻿http://localhost:4000/ => ERR 无法连接到远程服务器
-http://localhost:4000/api/student/shops => ERR 无法连接到远程服务器
-http://localhost:4000/supervisor/index.html => ERR 无法连接到远程服务器
-http://localhost:4000/orders => ERR 无法连接到远程服务器
