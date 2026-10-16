@@ -21,13 +21,13 @@
 
         <div class="account-hint">
           <span>测试账号：</span>
-          <button class="account-btn" @click="setAccount('shop1')">shop1</button><span> / </span>
-          <button class="account-btn" @click="setAccount('shop2')">shop2</button>
+          <button type="button" class="account-btn" @click="setAccount('shop1')">shop1</button><span> / </span>
+          <button type="button" class="account-btn" @click="setAccount('shop2')">shop2</button>
           <span> 密码：123456</span>
         </div>
         <div class="register-link">
           <span>还没有账号？</span>
-          <button class="link-btn" @click="showRegister = true">注册新商户</button>
+          <button type="button" class="link-btn" @click="showRegister = true">注册新商户</button>
         </div>
       </el-form>
     </div>

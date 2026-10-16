@@ -24,6 +24,11 @@
     .top-bar h2 { font-size: 20px; color: #1a365d; }
     .logout-btn { background: none; border: 1px solid #e74c3c; color: #e74c3c; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; }
     .logout-btn:hover { background: #e74c3c; color: #fff; }
+    .top-bar-right { display: flex; align-items: center; gap: 16px; }
+    .live-hint { font-size: 12px; color: #94a3b8; }
+    .status-tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; }
+    .status-tag.open { background: #ecfdf5; color: #10b981; }
+    .status-tag.closed { background: #fef2f2; color: #ef4444; }
     .card-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
     .stat-card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .stat-card .label { font-size: 13px; color: #999; margin-bottom: 6px; }
@@ -86,7 +91,10 @@
     <main class="content">
       <div class="top-bar">
         <h2>{{ tabTitle }}</h2>
-        <button class="logout-btn" @click="doLogout">退出登录</button>
+        <div class="top-bar-right">
+          <span class="live-hint">🔄 自动刷新中 · 最后更新 {{ lastUpdated || '—' }}</span>
+          <button class="logout-btn" @click="doLogout">退出登录</button>
+        </div>
       </div>
 
       <!-- Dashboard -->
@@ -117,10 +125,11 @@
           <h3>🏪 商家列表</h3>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>商家名称</th><th>评分</th><th>月销量</th><th>考评次数</th><th>奖励次数</th><th>完成订单</th><th>学生评分</th><th>操作</th></tr></thead>
+              <thead><tr><th>商家名称</th><th>营业状态</th><th>评分</th><th>月销量</th><th>考评次数</th><th>奖励次数</th><th>完成订单</th><th>学生评分</th><th>操作</th></tr></thead>
               <tbody>
                 <tr v-for="shop in shops" :key="shop.id">
                   <td><strong>{{ shop.name }}</strong></td>
+                  <td><span :class="['status-tag', shop.status === 'open' ? 'open' : 'closed']">{{ shop.status === 'open' ? '营业中' : '休息中' }}</span></td>
                   <td><span :class="'score-badge' + (shop.score < 50 ? ' low' : '')">{{ shop.score || 0 }}</span></td>
                   <td>{{ shop.monthlySales || 0 }}</td>
                   <td>{{ shop.evaluationCount }}</td>
@@ -132,7 +141,7 @@
                     <el-button size="small" type="success" @click="openRewardModal(shop)">奖励</el-button>
                   </td>
                 </tr>
-                <tr v-if="!shops.length"><td colspan="8" style="text-align:center;color:#999;padding:20px">暂无商家</td></tr>
+                <tr v-if="!shops.length"><td colspan="9" style="text-align:center;color:#999;padding:20px">暂无商家</td></tr>
               </tbody>
             </table>
           </div>
@@ -353,6 +362,7 @@ createApp({
     }
 
     function doLogout() {
+      stopPolling()
       loggedIn.value = false
       supervisorInfo.value = null
       localStorage.removeItem('supervisor_token')
@@ -369,7 +379,26 @@ createApp({
         if (e.data.code === 0) evaluations.value = e.data.data
         if (rw.data.code === 0) rewards.value = rw.data.data
         if (rg.data.code === 0) registrations.value = rg.data.data
+        lastUpdated.value = new Date().toLocaleTimeString('zh-CN')
       } catch { /* silent */ }
+    }
+
+    // ---- 自动刷新：每 5 秒同步一次商家营业状态等实时数据 ----
+    let pollTimer = null
+    async function refreshLive() {
+      try {
+        const [d, s] = await Promise.all([api.dashboard(), api.shops()])
+        if (d.data.code === 0) dashboard.value = d.data.data
+        if (s.data.code === 0) shops.value = s.data.data
+        lastUpdated.value = new Date().toLocaleTimeString('zh-CN')
+      } catch { /* silent */ }
+    }
+    function startPolling() {
+      stopPolling()
+      pollTimer = setInterval(refreshLive, 5000)
+    }
+    function stopPolling() {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
     }
 
     async function approveRegistration(reg) {
@@ -458,7 +487,7 @@ createApp({
 
     return {
       loggedIn, loggingIn, submitting, supervisorInfo, loginForm, loginError, tab, tabTitle,
-      dashboard, shops, evaluations, rewards, registrations, regFilter, pendingRegCount, filteredRegistrations,
+      dashboard, shops, evaluations, rewards, registrations, regFilter, pendingRegCount, filteredRegistrations, lastUpdated,
       showEvalModal, showRewardModal, showRejectModal, selectedShop, selectedRegistration, rejectReason, evalForm, rewardForm,
       doLogin, doLogout, openEvaluationModal, openRewardModal, approveRegistration, openRejectModal, confirmReject,
       submitEvaluation, deleteEvaluation, submitReward,

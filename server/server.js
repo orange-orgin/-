@@ -98,6 +98,12 @@ app.post('/api/login', (req, res) => {
   const { username, password } = req.body
   const shop = data.shops.find(s => s.id === username)
   if (!shop || password !== '123456') return res.json(fail(-1, '账号或密码错误'))
+  // 每次登录默认回到"休息中"，由商家手动开启营业，
+  // 避免商家离线后仍被监管端/学生端视为营业中
+  if (shop.status !== 'closed') {
+    shop.status = 'closed'
+    autoSave()
+  }
   res.json(ok({ token: 'token-' + username + '-' + Date.now(), shopInfo: shop }))
 })
 
@@ -703,7 +709,7 @@ app.put('/api/supervisor/registrations/:id/approve', (req, res) => {
     businessHours: reg.businessHours,
     notice: '',
     logo: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=restaurant%20logo%20food%20modern',
-    status: 'open',
+    status: 'closed',
     deliverFee: 0,
     minPrice: 10,
     score: 0,

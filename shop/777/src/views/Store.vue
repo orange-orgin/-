@@ -80,13 +80,16 @@
           <el-form-item label="营业状态">
             <div class="status-switch">
               <span class="status-label">{{ storeForm.status === 'open' ? '营业中' : '休息中' }}</span>
-              <el-switch 
-                v-model="storeForm.status" 
-                active-value="open" 
+              <el-switch
+                v-model="storeForm.status"
+                active-value="open"
                 inactive-value="closed"
                 active-text="营业"
                 inactive-text="休息"
+                :loading="statusSaving"
+                @change="onStatusChange"
               />
+              <span class="status-tip">切换后立即生效，监管端会自动同步</span>
             </div>
           </el-form-item>
           
@@ -236,6 +239,29 @@ function onLogoError() {
 
 function resetForm() {
   fillForm(authStore.shopInfo)
+}
+
+const statusSaving = ref(false)
+
+// 营业状态切换后立即保存，避免商家忘记点「保存设置」导致监管端看不到变化
+async function onStatusChange(val) {
+  const prev = val === 'open' ? 'closed' : 'open'
+  statusSaving.value = true
+  try {
+    const res = await authAPI.updateShop({ id: storeForm.value.id, status: val })
+    if (res && res.code === 0) {
+      authStore.updateShopInfo({ status: val })
+      ElMessage.success(val === 'open' ? '已切换为「营业中」' : '已切换为「休息中」')
+    } else {
+      storeForm.value.status = prev
+      ElMessage.error((res && res.message) || '状态更新失败')
+    }
+  } catch {
+    storeForm.value.status = prev
+    ElMessage.error('状态更新失败，请检查网络')
+  } finally {
+    statusSaving.value = false
+  }
 }
 
 async function saveStore() {
@@ -411,6 +437,11 @@ async function saveStore() {
   .status-label {
     font-size: 14px;
     color: #333;
+  }
+
+  .status-tip {
+    color: #999;
+    font-size: 12px;
   }
 }
 
