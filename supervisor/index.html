@@ -351,6 +351,7 @@ createApp({
     const loginForm = ref({ username: 'admin', password: 'admin123' })
     const tab = ref('dashboard')
     const dashboard = ref({})
+    const lastUpdated = ref('')
     const shops = ref([])
     const evaluations = ref([])
     const rewards = ref([])
@@ -385,6 +386,7 @@ createApp({
           loggedIn.value = true
           localStorage.setItem('supervisor_token', res.data.data.token)
           loadAll()
+          startPolling()
         } else {
           loginError.value = res.data.message || '登录失败'
         }
@@ -513,6 +515,7 @@ createApp({
         supervisorInfo.value = { id: 'admin', name: '平台管理员' }
         loggedIn.value = true
         loadAll()
+        startPolling()
       }
     })
 
