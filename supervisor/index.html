@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>校园点餐 — 监管方工作台</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus@2.6.1/dist/index.css" />
+  <link rel="stylesheet" href="./vendor/element-plus.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Helvetica Neue', 'Microsoft YaHei', sans-serif; background: #f0f2f5; color: #333; }
@@ -58,6 +58,37 @@
   </style>
 </head>
 <body>
+<div id="boot-error" style="display:none"></div>
+<script>
+  // 白屏诊断：把启动期的错误直接显示在页面上，便于定位问题
+  (function () {
+    function show(msg) {
+      var el = document.getElementById('boot-error')
+      if (!el) return
+      el.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#fef2f2;color:#b91c1c;border-bottom:1px solid #fca5a5;padding:10px 14px;font:13px/1.6 Consolas,monospace;white-space:pre-wrap'
+      el.textContent += msg + '\n'
+      el.style.display = 'block'
+    }
+    window.addEventListener('error', function (e) {
+      if (e.target && e.target.tagName === 'SCRIPT') {
+        show('资源加载失败：' + e.target.src)
+      } else {
+        show('脚本错误：' + (e.message || e.error) + '  @第' + (e.lineno || '?') + '行')
+      }
+    }, true)
+    window.addEventListener('unhandledrejection', function (e) {
+      show('异步错误：' + ((e.reason && (e.reason.stack || e.reason.message)) || e.reason))
+    })
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var app = document.getElementById('app')
+        if (app && !app.innerHTML.trim()) {
+          show('Vue 没有渲染出任何内容。若上方没有其他错误，通常是 vendor 目录下的 JS 未正确加载。')
+        }
+      }, 1500)
+    })
+  })()
+</script>
 <div id="app">
   <!-- Login Screen -->
   <div v-if="!loggedIn" class="login-wrap">
@@ -292,9 +323,9 @@
   </el-dialog>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/element-plus@2.6.1/dist/index.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+<script src="./vendor/vue.global.prod.js"></script>
+<script src="./vendor/element-plus.full.min.js"></script>
+<script src="./vendor/axios.min.js"></script>
 <script>
 const { createApp, ref, computed, onMounted } = Vue
 

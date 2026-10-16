@@ -931,8 +931,21 @@ app.listen(PORT, () => {
 const SUPERVISOR_PORT = Number(process.env.SUPERVISOR_PORT || 3001)
 if (SUPERVISOR_PORT && SUPERVISOR_PORT !== Number(PORT)) {
   const supervisorEntry = express()
-  supervisorEntry.get('/', (req, res) => res.redirect('/supervisor/index.html'))
-  supervisorEntry.get('/index.html', (req, res) => res.redirect('/supervisor/index.html'))
+  // 返回一个会立即跳转的 HTML 页面（而不是 302），避免预览窗口不跟随重定向时显示空白
+  const supervisorEntryPage = (req, res) => {
+    res.type('html').send(
+      '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">' +
+      '<meta http-equiv="refresh" content="0;url=/supervisor/index.html">' +
+      '<title>校园点餐 · 监管端</title></head>' +
+      '<body style="font-family:sans-serif;padding:40px;text-align:center;color:#333">' +
+      '<p>正在进入监管端工作台…</p>' +
+      '<p><a href="/supervisor/index.html">如果没有自动跳转，点这里</a></p>' +
+      '<script>location.replace("/supervisor/index.html")<\/script>' +
+      '</body></html>'
+    )
+  }
+  supervisorEntry.get('/', supervisorEntryPage)
+  supervisorEntry.get('/index.html', supervisorEntryPage)
   supervisorEntry.use((req, res, next) => app(req, res, next))
   supervisorEntry.listen(SUPERVISOR_PORT, () => {
     console.log(`✅ 监管端入口已启动: http://localhost:${SUPERVISOR_PORT}/supervisor/index.html`)
